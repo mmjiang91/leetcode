@@ -6,31 +6,34 @@
 
 # @lc code=start
 class Solution:
-    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
-        i, j = 0, 0
-        count = 0
-        n = (len(nums1)+len(nums2))//2
-        cur_num = 0
-        last_num = 0
-        while(count <= n):
-            num1 = nums1[i] if i < len(nums1) else 100000000
-            num2 = nums2[j] if j < len(nums2) else 100000000
-            if num1 == 100000000 == num2:
-                break
-            last_num = cur_num
-            if num1 < num2:
-                i += 1
-                cur_num = num1
-            else:
-                j += 1
-                cur_num = num2
-            count += 1
+    def findkthValue(self, nums1, nums2, k):
+        if not nums1:
+            return nums2[k-1]
         
-        if ( len(nums1) + len(nums2) ) % 2 == 0:
-            return (last_num+cur_num) / 2
+        if not nums2:
+            return nums1[k-1]
+
+        if k == 1:
+            return min(nums1[0], nums2[0])
+
+        m = k//2
+        
+        if nums1[min(m-1, len(nums1)-1)] >= nums2[min(m-1, len(nums2)-1)]:
+            return self.findkthValue(nums1, nums2[m:], k-min(m, len(nums2)))
         else:
-            return cur_num
+            return self.findkthValue(nums1[m:], nums2, k-min(m, len(nums1)))
+
+
+    def findMedianSortedArrays(self, nums1, nums2):
+        m = len(nums1)
+        n = len(nums2)
+        if (m+n) % 2 == 0:
+            return (self.findkthValue(nums1, nums2, (m+n)//2) + self.findkthValue(nums1, nums2, (m+n)//2+1) )/2
+        else:
+            return self.findkthValue(nums1, nums2, (m+n)//2 + 1)
             
-            
+if __name__ == '__main__':
+    s = Solution()
+    print(s.findMedianSortedArrays([1,2], []))            
 # @lc code=end
 

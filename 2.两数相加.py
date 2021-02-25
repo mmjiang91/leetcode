@@ -21,21 +21,16 @@ class Solution:
         head = p
         ahead = 0
         while l1 or l2:
-            if l1 and l2:
-                sumv = l1.val+l2.val+ahead
-                p.next = ListNode(sumv%10)
-                ahead = sumv//10
-                l1 = l1.next
-                l2 = l2.next
-            elif l1:
-                p.next = ListNode((ahead+l1.val)%10)
-                ahead = (ahead+l1.val)//10
-                l1 = l1.next
-            elif l2:
-                p.next = ListNode((ahead+l2.val)%10)
-                ahead = (ahead+l2.val)//10
-                l2 = l2.next
+            l1_val = l1.val if l1 else 0
+            l2_val = l2.val if l2 else 0
+            sumv = l1_val + l2_val + ahead
+            ahead = sumv // 10
+            p.next = ListNode(sumv%10)
             p = p.next
+            if l1:
+                l1 = l1.next
+            if l2:
+                l2 = l2.next
         if ahead>0:
             p.next = ListNode(ahead)
         return head.next
